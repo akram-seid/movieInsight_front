@@ -17,6 +17,7 @@ const Discussion = () => {
         filtered: false,
         more: false,
     });
+    const [user, setUser] = useState("");
     const [error, setError] = useState(null);
     const [posts, setPosts] = useState([]);
 
@@ -75,6 +76,20 @@ const Discussion = () => {
         setPagination((prev) => ({...prev, page: prev.page + 1}));
     };
 
+    const handleDeleteReply = (id) => {
+        setPosts(posts.filter((reply) => reply.id !== id));
+    };
+
+
+    useEffect(() => {
+        const getAuthToken = () => {
+            const data = sessionStorage.getItem("auth");
+            const userData = JSON.parse(data);
+            setUser(userData);
+        };
+        getAuthToken();
+    }, []);
+
     const handleDiscussionDetail = (id) => {
         navigate(`/forum/${id}`);
     };
@@ -98,13 +113,27 @@ const Discussion = () => {
                         {posts.map((post, index) => (
                             <li key={index} className="bg-gray-800 p-4 rounded-lg"
                                 onClick={() => handleDiscussionDetail(post.postId)}>
-                                <div className="flex justify-between items-center mb-2">
+                                <div className="flex justify-between items-end mb-2">
               <span className="font-semibold text-blue-400">
                 a post by: {post.createdBy}
               </span>
+                                    <div className="flex justify-between items-center">
+
+
                                     <span className="text-xs text-gray-400">
                 {formatDate(post.timestamp)}
               </span>
+                                        {user.role == "ADMIN" && (
+                                            <button
+                                                onClick={() => handleDeleteReply(post.id)}
+                                                className="text-red-400 hover:text-red-300 focus:outline-none ml-4"
+                                                title="Delete Reply"
+                                            >
+                                                &times;
+                                            </button>
+                                        )
+                                        }
+                                    </div>
                                 </div>
                                 <p className="text-white text-xs font-bold uppercase tracking-wide mb-1">
                                     [{post.movieTitle}] <span className="text-green-300">{post.title}</span>
@@ -113,6 +142,7 @@ const Discussion = () => {
                                 <p className="text-gray-300 text-m leading-snug mb-2 line-clamp-3">
                                     {post.content}
                                 </p>
+
                             </li>))}
                     </ul>)}
                 {hasMore && (

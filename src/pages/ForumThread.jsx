@@ -11,6 +11,7 @@ const ForumThread = () => {
     const [loading, setLoading] = useState(false);
     const {id} = useParams();
     const [showAlert, setShowAlert] = useState(false);
+    const [user, setUser] = useState("");
 
 
     const wsRef = useRef(null);
@@ -36,6 +37,15 @@ const ForumThread = () => {
         fetchPostDetails(id);
 
     }, [id]);
+
+    useEffect(() => {
+        const getAuthToken = () => {
+            const data = sessionStorage.getItem("auth");
+            const userData = JSON.parse(data);
+            setUser(userData);
+        };
+        getAuthToken();
+    }, []);
 
     // Simulate WebSocket connection
     useEffect(() => {
@@ -83,7 +93,7 @@ const ForumThread = () => {
 
         const reply = {
             id: Date.now(),
-            user: "You",
+            user: user.username,
             avatar: "https://picsum.photos/id/110/200/200",
             content: newReply,
             timestamp: "Just now",
@@ -95,6 +105,10 @@ const ForumThread = () => {
         // Optimistically update UI
         setReplies([reply, ...replies]);
         setNewReply("");
+    };
+
+    const handleDeleteReply = (id) => {
+        setReplies(replies.filter((reply) => reply.id !== id));
     };
 
     const formatDate = (dateInput) => {
@@ -178,6 +192,16 @@ const ForumThread = () => {
                                                 {reply.content}
                                             </p>
                                         </div>
+                                        {user.role == "ADMIN" && (
+                                            <button
+                                                onClick={() => handleDeleteReply(reply.id)}
+                                                className="text-red-400 hover:text-red-300 focus:outline-none ml-2"
+                                                title="Delete Reply"
+                                            >
+                                                &times;
+                                            </button>
+                                        )
+                                        }
                                     </div>
                                 </div>
                             ))

@@ -18,8 +18,6 @@ const Analytics = () => {
 
 
     useEffect(() => {
-        const abortController = new AbortController();
-        const {signal} = abortController;
 
         const fetchAllData = async () => {
             try {
@@ -27,16 +25,15 @@ const Analytics = () => {
                 setError(null);
 
                 // Fetch all data in parallel
-                const [trends, distribution, revenueBudget, runtime, genres] = await Promise.all([
-                    MovieService.getRatingTrend({signal}, fromDate, toDate),
-                    MovieService.getBudgetVsRevenue({signal}, fromDate, toDate),
-                    MovieService.getAvgRuntime({signal}),
-                    MovieService.genreHeatMap({signal}),
+                const [trends, revenueBudget, runtime, genres] = await Promise.all([
+                    MovieService.getRatingTrend(fromDate, toDate),
+                    MovieService.getBudgetVsRevenue(fromDate, toDate),
+                    MovieService.getAvgRuntime(),
+                    MovieService.genreHeatMap(),
                 ]);
 
                 // Update state
                 setYearTrend(trends.ts);
-                setRatingDistribution(distribution.ts);
                 setRevenueVsBudget(revenueBudget.ts);
                 setRuntime(runtime.ts);
                 setGenreDistribution(genres.ts)
@@ -50,10 +47,6 @@ const Analytics = () => {
         };
 
         fetchAllData();
-
-        return () => {
-            abortController.abort(); // Cancel pending requests on unmount
-        };
     }, []);
     return (
         <>{loading ? <SkeletonCatalog/> : (

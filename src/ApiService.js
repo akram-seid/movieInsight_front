@@ -123,11 +123,10 @@ export const MovieService = {
         }
     },
 
-    getRatingTrend: async ({signal}, from, to) => {
+    getRatingTrend: async (from, to) => {
         try {
             const response = await axios.get(`${baseUrl}/analytics/ratingTrend`, {
                 params: {from, to},
-                signal,
                 ...getAuthHeaders(),
             });
             return response.data;
@@ -137,11 +136,10 @@ export const MovieService = {
         }
     },
 
-    getRatingDistribution: async ({signal}, from, to) => {
+    getRatingDistribution: async (from, to) => {
         try {
             const response = await axios.get(`${baseUrl}/analytics/ratingDistribution`, {
                 params: {from, to},
-                signal,
                 ...getAuthHeaders(),
             });
             return response.data;
@@ -150,11 +148,10 @@ export const MovieService = {
             throw error;
         }
     },
-    getBudgetVsRevenue: async ({signal}, from, to) => {
+    getBudgetVsRevenue: async (from, to) => {
         try {
             const response = await axios.get(`${baseUrl}/analytics/budgetVsRevenue`, {
                 params: {from, to},
-                signal,
                 ...getAuthHeaders(),
             });
             return response.data;

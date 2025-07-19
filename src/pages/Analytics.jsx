@@ -11,7 +11,6 @@ const Analytics = () => {
     const [error, setError] = useState(null);
     const [yearTrend, setYearTrend] = useState(null);
     const [genres, setGenreDistribution] = useState(null);
-    const [ratingDistribution, setRatingDistribution] = useState(null);
     const [revenueVsBudget, setRevenueVsBudget] = useState(null);
     const [runtime, setRuntime] = useState(null);
     const [fromDate, setFromDate] = useState("2010-01-01");
@@ -30,7 +29,6 @@ const Analytics = () => {
                 // Fetch all data in parallel
                 const [trends, distribution, revenueBudget, runtime, genres] = await Promise.all([
                     MovieService.getRatingTrend({signal}, fromDate, toDate),
-                    MovieService.getRatingDistribution({signal}, fromDate, toDate),
                     MovieService.getBudgetVsRevenue({signal}, fromDate, toDate),
                     MovieService.getAvgRuntime({signal}),
                     MovieService.genreHeatMap({signal}),

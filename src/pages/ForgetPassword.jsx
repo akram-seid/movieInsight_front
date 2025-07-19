@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
 
-const Register = () => {
-    const [username, setUsername] = useState('');
+const ForgotPassword = () => {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
     const navigate = useNavigate();
@@ -13,13 +11,12 @@ const Register = () => {
         e.preventDefault();
 
         // Basic validation
-        if (!username || !email || !password) {
+        if (!email) {
             setError('All fields are required.');
             return;
         }
 
         // In real app: call API or auth function
-        console.log('Registering:', {username, email, password});
 
         // Clear error
         setError('');
@@ -30,8 +27,10 @@ const Register = () => {
         <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
             <div className="bg-gray-800 p-8 rounded-lg shadow-xl w-full max-w-md">
                 <h1 className="text-3xl font-bold text-center mb-6">Movie Insight</h1>
-                <h3 className="text-lg font-bold text-center mb-6">Create Account</h3>
-                <p className="text-gray-400 text-center mb-6">Join us today — it's free!</p>
+                <h3 className="text-lg font-bold text-center mb-6">Reset Password</h3>
+                <p className="text-gray-400 text-center mb-6">You will receive a temporary password at the indicated
+                    email, if you
+                    have an account.</p>
 
                 {/* Error Message */}
                 {error && (
@@ -41,20 +40,6 @@ const Register = () => {
                 )}
 
                 <form onSubmit={handleRegister}>
-                    {/* Username Field */}
-                    <div className="mb-4">
-                        <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
-                            Username
-                        </label>
-                        <input
-                            id="username"
-                            type="text"
-                            placeholder="username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            className="w-full px-4 py-3 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
 
                     {/* Email Field */}
                     <div className="mb-4">
@@ -71,37 +56,22 @@ const Register = () => {
                         />
                     </div>
 
-                    {/* Password Field */}
-                    <div className="mb-6">
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
-                            Password
-                        </label>
-                        <input
-                            id="password"
-                            type="password"
-                            placeholder="••••••••"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-3 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
 
                     <button
                         type="submit"
-                        disabled={!username || !email || !password}
+                        disabled={!email}
                         className={`w-full py-3 rounded-lg font-semibold transition-colors ${
-                            username && email && password
+                            email
                                 ? 'bg-blue-600 hover:bg-blue-700 text-white'
                                 : 'bg-gray-600 text-gray-400 cursor-not-allowed'
                         }`}
                     >
-                        Register
+                        Reset Password
                     </button>
                 </form>
-
                 <div className="mt-6 text-center">
                     <p className="text-sm text-gray-400">
-                        Already have an account?{' '}
+                        Do you reset your password?{' '}
                         <button
                             onClick={() => navigate('/login')}
                             className="text-blue-400 hover:underline"
@@ -110,9 +80,10 @@ const Register = () => {
                         </button>
                     </p>
                 </div>
+
             </div>
         </div>
     );
 };
 
-export default Register;
+export default ForgotPassword;
